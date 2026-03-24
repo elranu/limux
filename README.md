@@ -130,6 +130,20 @@ rust/
 
 The terminal rendering is handled entirely by Ghostty's embedded library (`libghostty.so`), which provides GPU-accelerated OpenGL rendering. The UI layer is native GTK4 with libadwaita.
 
+## Security
+
+### Built-in browser sandbox
+
+The built-in WebKitGTK browser runs with its bubblewrap sandbox **enabled by default**. This is the secure default and requires unprivileged user namespaces to be available on the host system (true on most modern Linux desktops).
+
+If Limux fails to start with a sandbox-related crash (typically seen inside containers or on hardened kernels with `kernel.unprivileged_userns_clone=0`), you can disable the sandbox as a last resort by setting the following environment variable before launching:
+
+```bash
+WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS=1 limux
+```
+
+> **Warning:** Disabling the WebKit sandbox removes a significant security boundary for the built-in browser. Only do this if your system genuinely does not support user namespaces and you understand the risk. Never set this variable system-wide (e.g., in `/etc/environment`).
+
 ## License
 
 MIT
